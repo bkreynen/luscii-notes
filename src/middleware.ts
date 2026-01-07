@@ -1,8 +1,11 @@
-// --- Error handler middleware ---
 import { Request, Response, NextFunction } from 'express'
 import { validate as uuidValidate, version as uuidVersion } from 'uuid'
 
-export function unexpectedErrorHandler(err: any, req: Request, res: Response, next: NextFunction) {
+// --- Error Handling Middleware ---
+export function errorHandler(err: any, req: Request, res: Response, next: NextFunction) {
+  if (err.message === 'Note not found') {
+    return res.status(404).json({ error: 'Note not found.' })
+  }
   return res.status(500).json({ error: 'Internal server error' })
 }
 
