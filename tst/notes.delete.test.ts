@@ -1,4 +1,3 @@
-import { validate as uuidValidate, version as uuidVersion } from 'uuid'
 import { createTestApp, createErrorTestApp, TestApp } from './testUtils'
 
 let app: TestApp
