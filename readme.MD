@@ -114,7 +114,7 @@ This modular structure makes it easy to extend, test, and maintain the codebase.
 
 ### How to impelement using AWS Lambda and DynamoDB
 
-If in the future this would be impelemented using AWS Lambda and DynamoDB, roughly the following steps are required:
+If in the future this would be implemented using AWS Lambda and DynamoDB, roughly the following steps are required:
 
 1. **Create a new repository implementation**: Implement a new `DynamoDBNotesRepository` class that adheres to the `NotesRepository` interface, using AWS SDK to interact with DynamoDB.
 2. **Update dependency injection**: Modify the application setup to inject `DynamoDBNotesRepository` instead of `InMemoryNotesRepository`.
@@ -125,14 +125,14 @@ If in the future this would be impelemented using AWS Lambda and DynamoDB, rough
 
 ### Adding authentication in the future
 
-Assuming: user authentication (so personal notes per user), using AWS Cognito for authentication and authorization, and we have setup the app t owork with AWS Lambda and DynamoDB.
-To add authentication in the future, roughly the following steps would have be taken:
+Assuming: user authentication (so personal notes per user), using AWS Cognito for authentication and authorization, and we have setup the app to work with AWS Lambda and DynamoDB.
+To add authentication in the future, roughly the following steps would have to be taken:
 
 1. **Update the API spec**: Modify the API specification to include authentication requirements.
 2. **Update the code (including required tests)**:
    - Add authentication middleware to verify JWT tokens from AWS Cognito.
    - Modify the `NotesRepository` and `NotesService` to associate notes with user IDs.
-   - Update endpoints to to require authentication according to spec.
+   - Update endpoints to require authentication according to spec.
    - Update app to extract the user information when using Lambda.
 3. **Setup AWS resources**: Ensure AWS Cognito is set up correctly with terraform. This configuration will depend on what is already configured for users in the real context.
 4. **Update deployment pipeline**: Ensure the deployment pipeline includes any necessary steps and environment variables to configure AWS Cognito and update Lambda permissions if needed.
