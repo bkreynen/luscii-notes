@@ -17,7 +17,6 @@ describe('POST /notes', () => {
     // Assert: Valid response structure and content
     expect(response.status).toBe(201)
     expect(Object.keys(response.body).sort()).toEqual(['content', 'id'])
-    expect(response.body).toHaveProperty('id')
     expect(uuidValidate(response.body.id)).toBe(true)
     expect(uuidVersion(response.body.id)).toBe(4)
     expect(response.body.content).toBe(noteContent)
