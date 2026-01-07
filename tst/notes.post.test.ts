@@ -36,7 +36,6 @@ describe('POST /notes', () => {
     expect(response.status).toBe(400)
     expect(response.body).toEqual({ error: 'Content exceeds maximum length.' })
   })
-
 })
 
 // Add tests when implementing GET /notes
