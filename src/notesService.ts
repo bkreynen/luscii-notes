@@ -1,17 +1,15 @@
+import { Note, NotesRepository, NotesService } from './types'
 import { v4 as uuidv4 } from 'uuid'
 
-export interface Note {
-  id: string
-  content: string
-}
-
-const notes: Note[] = []
-
-export function createNote(content: string): Note {
-  const note = {
-    id: uuidv4(),
-    content,
+export function createNotesService(repo: NotesRepository): NotesService {
+  return {
+    createNote(content: string): Note {
+      const note: Note = {
+        id: uuidv4(),
+        content,
+      }
+      repo.saveNote(note)
+      return note
+    },
   }
-  notes.push(note)
-  return note
 }

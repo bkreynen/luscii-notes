@@ -1,8 +1,9 @@
-import * as notesService from '../src/notesService'
+import { createApp } from '../src/index'
+import { inMemoryNotesRepository } from '../src/notesRepository'
 import request from 'supertest'
 import { validate as uuidValidate, version as uuidVersion } from 'uuid'
-import app from '../src/index'
 
+let app = createApp(inMemoryNotesRepository)
 const postNote = (payload: any) => request(app).post('/notes').send(payload)
 
 describe('POST /notes', () => {
@@ -94,28 +95,19 @@ describe('POST /notes', () => {
   })
 
   it('should handle unexpected errors securely', async () => {
-    // Arrange: Mock createNote to throw an error
-    jest.spyOn(notesService, 'createNote').mockImplementation(() => {
-      throw new Error('Simulated error')
-    })
+    // Arrange: Custom repo that throws error on saveNote
+    const errorRepo = {
+      saveNote: () => {
+        throw new Error('Simulated error')
+      },
+    }
+    app = createApp(errorRepo)
 
     // Act
-    const response = await postNote({ content: 'test' })
+    const response = await request(app).post('/notes').send({ content: 'test' })
 
     // Assert
     expect(response.status).toBe(500)
     expect(response.body).toEqual({ error: 'Internal server error' })
-
-    // Cleanup
-    jest.restoreAllMocks()
   })
 })
-
-// Add tests when implementing GET /notes
-// describe('GET /notes', () => {
-//   it('should return all notes', async () => {
-//     const response = await request(app).get('/notes')
-//     expect(response.status).toBe(200)
-//     expect(Array.isArray(response.body)).toBe(true)
-//   })
-// })
