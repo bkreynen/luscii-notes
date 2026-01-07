@@ -21,4 +21,8 @@ export class NotesServiceImpl implements NotesService {
     }
     await this.repo.deleteNote(id)
   }
+
+  async getNotes(): Promise<Note[]> {
+    return this.repo.getNotes()
+  }
 }
