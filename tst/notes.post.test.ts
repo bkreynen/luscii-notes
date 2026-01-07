@@ -9,10 +9,13 @@ describe('POST /notes, in memory storage', () => {
   })
 
   it('should create a new note and return a valid response', async () => {
+    // Arrange
     const noteContent = 'My first note'
 
     // Act
     const response = await app.postNote({ content: noteContent })
+
+    // Assert
     expect(response.status).toBe(201)
     expect(Object.keys(response.body).sort()).toEqual(['content', 'id'])
     expect(response.body.content).toBe(noteContent)
