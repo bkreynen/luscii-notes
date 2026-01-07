@@ -14,7 +14,7 @@ export class NotesServiceImpl implements NotesService {
   }
 
   async deleteNote(id: string): Promise<void> {
-    //get the note to ensure it exists
+    // Get the note to ensure it exists
     const note = await this.repo.getNote(id)
     if (!note) {
       throw new Error('Note not found')
