@@ -14,46 +14,52 @@ export class NotesApi {
   public app: express.Express
   private notesService: NotesServiceImpl
 
+  // Wrapper to handle async errors in route handlers
+  private requestHandler(fn: express.RequestHandler): express.RequestHandler {
+    return (req, res, next) => {
+      Promise.resolve(fn(req, res, next)).catch(next)
+    }
+  }
+
   constructor(repo: NotesRepository = new InMemoryNotesRepository()) {
     this.app = express()
     this.app.use(express.json())
     this.notesService = new NotesServiceImpl(repo)
 
     // POST /notes: Create a note
-    this.app.post('/notes', cleanNoteMiddleware, validateNoteMiddleware, this.createNoteHandler)
+    this.app.post(
+      '/notes',
+      cleanNoteMiddleware,
+      validateNoteMiddleware,
+      this.requestHandler(async (req, res) => {
+        const content = req.body.content
+        const note = await this.notesService.createNote(content)
+        return res.status(201).json(note)
+      }
+    ))
 
     // DELETE /notes/:id: Delete a note by ID
-    this.app.delete('/notes/:id', validateNoteIdMiddleware, this.deleteNoteHandler)
+    this.app.delete(
+      '/notes/:id',
+      validateNoteIdMiddleware,
+      this.requestHandler(async (req, res) => {
+        const noteId = req.params.id
+        await this.notesService.deleteNote(noteId)
+        return res.status(204).send()
+      }
+    ))
+
+    // GET /notes: Get all notes
+    this.app.get(
+      '/notes',
+      this.requestHandler(async (req, res) => {
+        const notes = await this.notesService.getNotes()
+        return res.status(200).json(notes)
+      }
+    ))
 
     // General error handling middleware, will run after all other middlewares
     this.app.use(errorHandler)
-  }
-
-  private createNoteHandler = async (
-    req: express.Request,
-    res: express.Response,
-    next: express.NextFunction
-  ) => {
-    try {
-      const note = await this.notesService.createNote(req.body.content)
-      return res.status(201).json(note)
-    } catch (err) {
-      next(err)
-    }
-  }
-
-  private deleteNoteHandler = async (
-    req: express.Request,
-    res: express.Response,
-    next: express.NextFunction
-  ) => {
-    try {
-      const noteId = req.params.id
-      await this.notesService.deleteNote(noteId)
-      return res.status(204).json({})
-    } catch (err) {
-      next(err)
-    }
   }
 }
 
