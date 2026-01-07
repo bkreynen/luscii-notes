@@ -1,4 +1,5 @@
-name: Prettier Code Format Check
+
+name: CI Pipeline
 
 on:
   pull_request:
@@ -8,6 +9,7 @@ on:
 
 jobs:
   prettier:
+    name: Prettier
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -23,6 +25,21 @@ jobs:
 
       - name: Run Prettier
         run: npx prettier --check .
+
+  test:
+    name: Tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install dependencies
+        run: npm install
 
       - name: Run Tests
         run: npm test
