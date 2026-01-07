@@ -49,6 +49,10 @@ npm run format
 
 ## Contributing
 
+### Getting Started
+
+If you want to quickly get started, use vs code and have docker installed you can use the devcontainer to get an environment ready to go. Just run the "Reopen in Container" command from the command palette.
+
 ### Pull Requests
 
 Use pull requests to propose and submit changes to the codebase. Ensure your changes are well-documented and tested. Squash commits when merging to keep the history clean.
@@ -61,6 +65,7 @@ Each commit will be prefixed to denote the type of change:
 - `[STYLE]:` for code style changes
 - `[REFAC]:` for code refactoring
 - `[TEST]:` for adding or updating tests
+- `[DEV]:` for development environment changes
 
 ### Code style
 
