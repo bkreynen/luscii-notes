@@ -103,9 +103,45 @@ This section outlines some assumptions and decisions made during development. So
   - **notesService.ts** – Business logic for notes (service class)
   - **types.ts** – Shared TypeScript interfaces and types
 - **tst/** – Test suite
-  - **notes.post.test.ts** – Tests for POST /notes endpoint
+  - **notes.\*.test.ts** – Unit tests for each endpoint
   - **testUtils.ts** – Test helpers and test app factory
 - **api-spec.MD** – API specification and contract
 - **readme.MD** – Project documentation
 
 This modular structure makes it easy to extend, test, and maintain the codebase.
+
+## Future
+
+### How to impelement using AWS Lambda and DynamoDB
+
+If in the future this would be implemented using AWS Lambda and DynamoDB, roughly the following steps are required:
+
+1. **Create a new repository implementation**: Implement a new `DynamoDBNotesRepository` class that adheres to the `NotesRepository` interface, using AWS SDK to interact with DynamoDB.
+2. **Update dependency injection**: Modify the application setup to inject `DynamoDBNotesRepository` instead of `InMemoryNotesRepository`.
+3. **Make app compatible with Lambda**: Refactor the Express app to be compatible with AWS Lambda using a library like `aws-serverless-express`.
+4. **Integration tests**: Ensure there are integration tests that test the full stack with DynamoDB and Lambda.
+5. **Set up AWS resources**: In the manner used within the team/organization, set up the necessary AWS resources (e.g. Terraform).
+6. **Configure the deployment pipeline**: Set up the CI/CD pipeline to deploy the Lambda function and DynamoDB table. Also ensure environment variables and permissions are correctly configured.
+
+### Adding authentication in the future
+
+Assuming: user authentication (so personal notes per user), using AWS Cognito for authentication and authorization, and we have setup the app to work with AWS Lambda and DynamoDB.
+To add authentication in the future, roughly the following steps would have to be taken:
+
+1. **Update the API spec**: Modify the API specification to include authentication requirements.
+2. **Update the code (including required tests)**:
+   - Add authentication middleware to verify JWT tokens from AWS Cognito.
+   - Modify the `NotesRepository` and `NotesService` to associate notes with user IDs.
+   - Update endpoints to require authentication according to spec.
+   - Update app to extract the user information when using Lambda.
+3. **Setup AWS resources**: Ensure AWS Cognito is set up correctly with terraform. This configuration will depend on what is already configured for users in the real context.
+4. **Update deployment pipeline**: Ensure the deployment pipeline includes any necessary steps and environment variables to configure AWS Cognito and update Lambda permissions if needed.
+
+### Documenting and sharing the API in a real team setting.
+
+In a real team setting, to document and share the API effectively, these are some recommended steps:
+
+1. **Use an API documentation tool**: Utilize tools like Swagger to properly document the API endpoints, request/response formats, and error codes.
+2. **Host the documentation**: Make the API documentation easily accessible to the team, e.g., hosting it on a shared Confluence page or a dedicated API documentation site.
+3. **Versioning**: Implement API versioning to manage changes and ensure backward compatibility.
+4. **Issue tracking**: Use an issue tracking system (like Jira or just in GitHub Issues) to log and track API changes, feature requests, and bugs.
