@@ -79,7 +79,7 @@ A simple CI pipeline is set up using GitHub Actions to run tests and format chec
 
 ## Assumptions and Decisions
 
-This section outlines some assumptions and decisions made during development. Some of these would normale be clarified with e.g. the product owner.
+This section outlines some assumptions and decisions made during development. Some of these would normally be clarified with e.g. the product owner.
 
 - The maximum length for a note's content is 1000 characters. For now an arbitrary limit is set to prevent excessively large notes.
 - Based on the initial tests a note has a content field (string) and an id (string). For the demo purposes we assume no other fields (like createdAt, updatedAt, title, tags, etc.) are needed.
