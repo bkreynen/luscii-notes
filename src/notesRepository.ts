@@ -14,7 +14,7 @@ export class InMemoryNotesRepository implements NotesRepository {
   }
 
   async getNotes(): Promise<Note[]> {
-    return this.notes
+    return [...this.notes]
   }
 
   async deleteNote(id: string): Promise<void> {
