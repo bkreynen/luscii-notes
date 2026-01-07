@@ -1,4 +1,3 @@
-import { Express } from 'express'
 export interface NotesService {
   createNote(content: string): Note
 }

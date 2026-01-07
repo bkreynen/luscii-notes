@@ -1,8 +1,5 @@
-import request, { Test } from 'supertest'
 import { validate as uuidValidate, version as uuidVersion } from 'uuid'
-import { Express } from 'express'
 import { createTestApp, createErrorTestApp, TestApp } from './testUtils'
-import { create } from 'domain'
 
 let app: TestApp
 
