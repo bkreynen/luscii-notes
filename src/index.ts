@@ -1,16 +1,16 @@
 import express from 'express'
-import { createNotesService } from './notesService'
-import { inMemoryNotesRepository } from './notesRepository'
+import { NotesServiceImpl } from './notesService'
+import { InMemoryNotesRepository } from './notesRepository'
 import { validateNoteMiddleware, cleanNoteMiddleware } from './middleware'
 import { NotesRepository } from './types'
 import { Express } from 'express'
 
-export function createApp(repo: NotesRepository = inMemoryNotesRepository): Express {
+export function createApp(repo: NotesRepository = new InMemoryNotesRepository()): Express {
   const app = express()
   app.use(express.json())
-  const notesService = createNotesService(repo)
+  const notesService = new NotesServiceImpl(repo)
 
-  app.post('/notes', validateNoteMiddleware, cleanNoteMiddleware, async (req, res, next) => {
+  app.post('/notes', cleanNoteMiddleware, validateNoteMiddleware, async (req, res, next) => {
     try {
       const note = await notesService.createNote(req.body.content)
       return res.status(201).json(note)
