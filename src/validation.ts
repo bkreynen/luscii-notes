@@ -6,10 +6,11 @@ export function validateNoteContent(content: any): string | null {
   if (typeof content !== 'string') {
     return 'Content must be a string.'
   }
-  if (content.trim() === '') {
+  const trimmedContent = content.trim()
+  if (trimmedContent === '') {
     return 'Content cannot be empty.'
   }
-  if (content.length > 1000) {
+  if (trimmedContent.length > 1000) {
     return 'Content exceeds maximum length.'
   }
   return null
