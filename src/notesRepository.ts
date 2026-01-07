@@ -13,6 +13,10 @@ export class InMemoryNotesRepository implements NotesRepository {
     return note || null
   }
 
+  async getNotes(): Promise<Note[]> {
+    return this.notes
+  }
+
   async deleteNote(id: string): Promise<void> {
     // not efficient, but not a concern for in-memory demo repository
     this.notes = this.notes.filter((note) => note.id !== id)

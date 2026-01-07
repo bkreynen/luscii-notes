@@ -11,6 +11,7 @@ export type TestApp = {
   getNotes: () => request.Test
 }
 
+// Create a test app with optional custom repository
 export function createTestApp(repo: NotesRepository = new InMemoryNotesRepository()): TestApp {
   const notesApi = new NotesApi(repo)
   const app = notesApi.app
@@ -20,8 +21,9 @@ export function createTestApp(repo: NotesRepository = new InMemoryNotesRepositor
   return { app, postNote, deleteNote, getNotes }
 }
 
+// Create a test app with a repository that simulates errors
 export function createErrorTestApp(): TestApp {
-  // A repository that always throws an error when saving a note
+  // A repository that always throws an error
   const errorRepo: NotesRepository = {
     async saveNote() {
       return Promise.reject(new Error('Simulated repository error'))
@@ -32,6 +34,10 @@ export function createErrorTestApp(): TestApp {
     async getNote(id: string) {
       return Promise.reject(new Error('Simulated repository error'))
     },
+    async getNotes() {
+      return Promise.reject(new Error('Simulated repository error'))
+    }
   }
+
   return createTestApp(errorRepo)
 }
