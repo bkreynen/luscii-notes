@@ -8,17 +8,20 @@ It was built using Node.js with in-memory storage for demonstration purposes.
 ---
 
 ## Requirements
+
 The application should meet the following requirements:
-  - Use Node.js
-  - Use in-memory storage (no database required)
-  - Handle errors securely
-  - Include unit tests
-  - Clear and maintainable code
+
+- Use Node.js
+- Use in-memory storage (no database required)
+- Handle errors securely
+- Include unit tests
+- Clear and maintainable code
 
 Implicit from the context:
-  - Secure
-  - Scalable
-  - Serverless environment
+
+- Secure
+- Scalable
+- Serverless environment
 
 ## Endpoints
 
@@ -39,14 +42,19 @@ npm start
 
 # Run tests
 npm test
+
+# Format code with Prettier
+npm run format
 ```
 
 ## Contributing
 
 ### Pull Requests
+
 Use pull requests to propose and submit changes to the codebase. Ensure your changes are well-documented and tested. Squash commits when merging to keep the history clean.
 
 Each commit will be prefixed to denote the type of change:
+
 - `[FEAT]:` for new features
 - `[FIX]:` for bug fixes
 - `[DOCS]:` for documentation changes
@@ -55,5 +63,5 @@ Each commit will be prefixed to denote the type of change:
 - `[TEST]:` for adding or updating tests
 
 ### Code style
-Usually I would use a linter like ESLint to maintain code style consistency in line with how the organization handles code style (since it is fairly configurable to the organization's preferences). For demonstration purposes we use prettier with default settings. This gives consistent formatting, without a lot of configuration.
 
+Usually I would use a linter like ESLint to maintain code style consistency in line with how the organization handles code style (since it is fairly configurable to the organization's preferences). For demonstration purposes we use prettier with default settings. This gives consistent formatting, without a lot of configuration.

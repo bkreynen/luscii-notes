@@ -1,15 +1,12 @@
 import request from 'supertest'
 import express from 'express'
 
-
 const app = express()
 app.use(express.json())
 
 describe('Notes API', () => {
   it('should create a new note', async () => {
-    const response = await request(app)
-      .post('/notes')
-      .send({ content: 'My first note' })
+    const response = await request(app).post('/notes').send({ content: 'My first note' })
 
     expect(response.status).toBe(201)
     expect(response.body).toHaveProperty('id')
