@@ -1,3 +1,4 @@
+import * as notesService from '../src/notesService'
 import request from 'supertest'
 import { validate as uuidValidate, version as uuidVersion } from 'uuid'
 import app from '../src/index'
@@ -5,6 +6,7 @@ import app from '../src/index'
 const postNote = (payload: any) => request(app).post('/notes').send(payload)
 
 describe('POST /notes', () => {
+
   it('should create a new note and return a valid response', async () => {
     // Arrange
     const noteContent = 'My first note'
@@ -28,11 +30,11 @@ describe('POST /notes', () => {
 
     // Act & Assert: Every note should have valid UUID v4 id.
     for (const content of contents) {
-      // Act (per note)
+      // Act
       const response = await postNote({ content })
       ids.push(response.body.id)
 
-      // Assert (per note)
+      // Assert
       expect(response.status).toBe(201)
       expect(uuidValidate(response.body.id)).toBe(true)
       expect(uuidVersion(response.body.id)).toBe(4)
@@ -50,7 +52,7 @@ describe('POST /notes', () => {
     // Act
     const response = await postNote(payload)
 
-    // Assert: Missing content should return 400 with appropriate error message
+    // Assert
     expect(response.status).toBe(400)
     expect(response.body).toEqual({ error: 'Content is required.' })
   })
@@ -62,7 +64,7 @@ describe('POST /notes', () => {
     // Act
     const response = await postNote(payload)
 
-    // Assert: Content cannot be empty should return 400 with appropriate error message
+    // Assert
     expect(response.status).toBe(400)
     expect(response.body).toEqual({ error: 'Content cannot be empty.' })
   })
@@ -74,7 +76,7 @@ describe('POST /notes', () => {
     // Act
     const response = await postNote(payload)
 
-    // Assert: Content not a string should return 400 with appropriate error message
+    // Assert
     expect(response.status).toBe(400)
     expect(response.body).toEqual({ error: 'Content must be a string.' })
   })
@@ -87,9 +89,26 @@ describe('POST /notes', () => {
     // Act
     const response = await postNote(payload)
 
-    // Assert: Content too long should return 400 with appropriate error message
+    // Assert
     expect(response.status).toBe(400)
     expect(response.body).toEqual({ error: 'Content exceeds maximum length.' })
+  })
+
+  it('should handle unexpected errors securely', async () => {
+      // Arrange: Mock createNote to throw an error
+      jest.spyOn(notesService, 'createNote').mockImplementation(() => {
+        throw new Error('Simulated error')
+      })
+
+      // Act
+      const response = await postNote({ content: 'test' })
+
+      // Assert
+      expect(response.status).toBe(500)
+      expect(response.body).toEqual({ error: 'Internal server error' })
+
+      // Cleanup
+      jest.restoreAllMocks()
   })
 })
 

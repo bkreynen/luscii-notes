@@ -1,5 +1,5 @@
 import express from 'express'
-import { v4 as uuidv4 } from 'uuid'
+import { createNote } from './notesService'
 
 const app = express()
 const port = process.env.PORT || 3000
@@ -13,6 +13,7 @@ const notes: Array<{ id: string; content: string }> = []
 app.post('/notes', (req, res, next) => {
   try {
     const { content } = req.body
+
     if (content === undefined) {
       return res.status(400).json({ error: 'Content is required.' })
     }
@@ -26,11 +27,7 @@ app.post('/notes', (req, res, next) => {
       return res.status(400).json({ error: 'Content exceeds maximum length.' })
     }
 
-    const note = {
-      id: uuidv4(),
-      content,
-    }
-    notes.push(note)
+    const note = createNote(content)
     return res.status(201).json(note)
   } catch (err) {
     next(err)
@@ -39,7 +36,6 @@ app.post('/notes', (req, res, next) => {
 
 // Error handler for secure error responses
 app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
-  // Log error internally if needed
   res.status(500).json({ error: 'Internal server error' })
 })
 
