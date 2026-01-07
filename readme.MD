@@ -90,6 +90,7 @@ This section outlines some assumptions and decisions made during development. So
 - I did not implement more complex sanitation in the demo which might be needed in the real context.
 - attempting to delete a note that does not exist returns a 404 error.
 - In the demo version I did not implement proper error types in the code. To the outside the API handles errors correctly.
+- In the demo version the get does not have pagination, sorting or filtering of any type.
 
 ## 🗂️ Code Structure
 
