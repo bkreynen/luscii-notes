@@ -35,8 +35,8 @@ export class NotesApi {
         const content = req.body.content
         const note = await this.notesService.createNote(content)
         return res.status(201).json(note)
-      }
-    ))
+      })
+    )
 
     // DELETE /notes/:id: Delete a note by ID
     this.app.delete(
@@ -46,8 +46,8 @@ export class NotesApi {
         const noteId = req.params.id
         await this.notesService.deleteNote(noteId)
         return res.status(204).send()
-      }
-    ))
+      })
+    )
 
     // GET /notes: Get all notes
     this.app.get(
@@ -55,8 +55,8 @@ export class NotesApi {
       this.requestHandler(async (req, res) => {
         const notes = await this.notesService.getNotes()
         return res.status(200).json(notes)
-      }
-    ))
+      })
+    )
 
     // General error handling middleware, will run after all other middlewares
     this.app.use(errorHandler)

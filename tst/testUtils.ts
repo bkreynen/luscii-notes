@@ -36,7 +36,7 @@ export function createErrorTestApp(): TestApp {
     },
     async getNotes() {
       return Promise.reject(new Error('Simulated repository error'))
-    }
+    },
   }
 
   return createTestApp(errorRepo)
