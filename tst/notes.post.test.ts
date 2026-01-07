@@ -8,10 +8,6 @@ describe('POST /notes, in memory storage', () => {
     app = createTestApp()
   })
 
-  afterEach(async () => {
-    await app.clearNotes()
-  })
-
   it('should create a new note and return a valid response', async () => {
     // Arrange
     const noteContent = 'My first note'
