@@ -53,8 +53,39 @@ Body: `{}` (empty object)
 
 ### Error Responses
 
-| Status | Condition                    | Response                               |
-| ------ | ---------------------------- | -------------------------------------- |
-| 400    | Invalid note ID (not a UUID) | `{ "error": "Invalid note ID." }`      |
-| 404    | Note not found               | `{ "error": "Note not found." }`       |
-| 500    | Internal server error        | `{ "error": "Internal server error" }` |
+| Status | Condition                    | Response                          |
+| ------ | ---------------------------- | --------------------------------- |
+| 400    | Invalid note ID (not a UUID) | `{ "error": "Invalid note ID." }` |
+| 404    | Note not found               | `{ "error": "Note not found." }`  |
+
+---
+
+## GET /notes
+
+Retrieve all notes.
+
+### Success Response
+
+**Status:** 200 OK
+
+```
+[
+	{
+		"id": "string",      // Unique note identifier (UUID)
+		"content": "string"   // The note content, max 1000 chars
+	},
+	// ... more notes
+]
+```
+
+If there are no notes, returns an empty array:
+
+```
+[]
+```
+
+### Error Responses
+
+| Status | Condition             | Response                               |
+| ------ | --------------------- | -------------------------------------- |
+| 500    | Internal server error | `{ "error": "Internal server error" }` |
