@@ -41,9 +41,9 @@ Delete a note by its ID.
 
 ### Path Parameter
 
-| Name | Type   | Description                |
-|------|--------|----------------------------|
-| id   | string | Note ID (UUID, required)   |
+| Name | Type   | Description              |
+| ---- | ------ | ------------------------ |
+| id   | string | Note ID (UUID, required) |
 
 ### Success Response
 
@@ -53,8 +53,8 @@ Body: `{}` (empty object)
 
 ### Error Responses
 
-| Status | Condition                        | Response                                 |
-|--------|----------------------------------|------------------------------------------|
-| 400    | Invalid note ID (not a UUID)     | `{ "error": "Invalid note ID." }`        |
-| 404    | Note not found                   | `{ "error": "Note not found." }`         |
-| 500    | Internal server error            | `{ "error": "Internal server error" }`   |
+| Status | Condition                    | Response                               |
+| ------ | ---------------------------- | -------------------------------------- |
+| 400    | Invalid note ID (not a UUID) | `{ "error": "Invalid note ID." }`      |
+| 404    | Note not found               | `{ "error": "Note not found." }`       |
+| 500    | Internal server error        | `{ "error": "Internal server error" }` |
