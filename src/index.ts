@@ -43,7 +43,6 @@ app.use((err: any, req: express.Request, res: express.Response, next: express.Ne
   res.status(500).json({ error: 'Internal server error' })
 })
 
-
 // Only start the server if this file is run directly
 if (require.main === module) {
   app.listen(port, () => {
