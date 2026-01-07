@@ -12,4 +12,13 @@ export class NotesServiceImpl implements NotesService {
     await this.repo.saveNote(note)
     return note
   }
+
+  async deleteNote(id: string): Promise<void> {
+    // Get the note to ensure it exists
+    const note = await this.repo.getNote(id)
+    if (!note) {
+      throw new Error('Note not found')
+    }
+    await this.repo.deleteNote(id)
+  }
 }

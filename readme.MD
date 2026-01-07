@@ -88,6 +88,8 @@ This section outlines some assumptions and decisions made during development. So
 - I did not bother with error logging for the demo version, but in a production system we would log errors to a logging service for monitoring and debugging.
 - I implemented a simple cleaning middleware to trim whitespace from note content before saving.
 - I did not implement more complex sanitation in the demo which might be needed in the real context.
+- attempting to delete a note that does not exist returns a 404 error.
+- In the demo version I did not implement proper error types in the code. To the outside the API handles errors correctly.
 
 ## 🗂️ Code Structure
 
