@@ -55,7 +55,7 @@ If you want to quickly get started, use vs code and have docker installed you ca
 
 ### Pull Requests
 
-Use pull requests to propose and submit changes to the codebase. Ensure your changes are well-documented and tested. Squash commits when merging to keep the history clean.
+Use pull requests to propose and submit changes to the codebase. Ensure your changes are well-documented and tested. Pull requests will be required to be squashed and merged to keep the commit history clean.
 
 Each commit will be prefixed to denote the type of change:
 
@@ -70,3 +70,7 @@ Each commit will be prefixed to denote the type of change:
 ### Code style
 
 Usually I would use a linter like ESLint to maintain code style consistency in line with how the organization handles code style (since it is fairly configurable to the organization's preferences). For demonstration purposes we use prettier with default settings. This gives consistent formatting, without a lot of configuration.
+
+### Pipeline
+
+A simple CI pipeline is set up using GitHub Actions to run tests and format checks on each pull request.
