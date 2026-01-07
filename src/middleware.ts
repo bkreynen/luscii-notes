@@ -1,9 +1,10 @@
+import { Request, Response, NextFunction } from 'express'
+
 // --- Cleaning logic ---
 function cleanNoteContent(content: string): string {
   return content.trim()
 }
 
-import { Request, Response, NextFunction } from 'express'
 export function cleanNoteMiddleware(req: Request, res: Response, next: NextFunction) {
   if (typeof req.body.content === 'string') {
     req.body.content = cleanNoteContent(req.body.content)
