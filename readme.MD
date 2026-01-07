@@ -72,4 +72,5 @@ Each commit will be prefixed to denote the type of change:
 Usually I would use a linter like ESLint to maintain code style consistency in line with how the organization handles code style (since it is fairly configurable to the organization's preferences). For demonstration purposes we use prettier with default settings. This gives consistent formatting, without a lot of configuration.
 
 ### Pipeline
+
 A simple CI pipeline is set up using GitHub Actions to run tests and format checks on each pull request.
