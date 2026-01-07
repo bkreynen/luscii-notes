@@ -1,5 +1,6 @@
 // --- Error handler middleware ---
 import { Request, Response, NextFunction } from 'express'
+import { validate as uuidValidate, version as uuidVersion } from 'uuid'
 
 export function unexpectedErrorHandler(err: any, req: Request, res: Response, next: NextFunction) {
   return res.status(500).json({ error: 'Internal server error' })
@@ -39,6 +40,14 @@ export function validateNoteMiddleware(req: Request, res: Response, next: NextFu
   const error = validateNoteContent(req.body.content)
   if (error) {
     return res.status(400).json({ error })
+  }
+  next()
+}
+
+export function validateNoteIdMiddleware(req: Request, res: Response, next: NextFunction) {
+  const noteId = req.params.id
+  if (!uuidValidate(noteId) || uuidVersion(noteId) !== 4) {
+    return res.status(400).json({ error: 'Invalid note ID.' })
   }
   next()
 }
