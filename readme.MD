@@ -91,6 +91,7 @@ This section outlines some assumptions and decisions made during development. So
 - attempting to delete a note that does not exist returns a 404 error.
 - In the demo version I did not implement proper error types in the code. To the outside the API handles errors correctly.
 - In the demo version the get does not have pagination, sorting or filtering of any type.
+- In the demo version deployment is not implemented in any way, but the code is structured to be easily deployable to serverless environments like AWS Lambda when a database is implemented and deployment pipelines are set up.
 
 ## 🗂️ Code Structure
 
