@@ -5,51 +5,63 @@ import {
   validateNoteMiddleware,
   validateNoteIdMiddleware,
   cleanNoteMiddleware,
-  unexpectedErrorHandler,
+  errorHandler,
 } from './middleware'
 import { NotesRepository } from './types'
-import { Express } from 'express'
 
-export function createApp(repo: NotesRepository = new InMemoryNotesRepository()): Express {
-  const app = express()
-  app.use(express.json())
-  const notesService = new NotesServiceImpl(repo)
+// Notes API Class
+export class NotesApi {
+  public app: express.Express
+  private notesService: NotesServiceImpl
 
-  //create note endpoint
-  app.post('/notes', cleanNoteMiddleware, validateNoteMiddleware, async (req, res, next) => {
+  constructor(repo: NotesRepository = new InMemoryNotesRepository()) {
+    this.app = express()
+    this.app.use(express.json())
+    this.notesService = new NotesServiceImpl(repo)
+
+    // POST /notes: Create a note
+    this.app.post('/notes', cleanNoteMiddleware, validateNoteMiddleware, this.createNoteHandler)
+
+    // DELETE /notes/:id: Delete a note by ID
+    this.app.delete('/notes/:id', validateNoteIdMiddleware, this.deleteNoteHandler)
+
+    // General error handling middleware, will run after all other middlewares
+    this.app.use(errorHandler)
+  }
+
+  private createNoteHandler = async (
+    req: express.Request,
+    res: express.Response,
+    next: express.NextFunction
+  ) => {
     try {
-      const note = await notesService.createNote(req.body.content)
+      const note = await this.notesService.createNote(req.body.content)
       return res.status(201).json(note)
     } catch (err) {
       next(err)
     }
-  })
+  }
 
-  //delete note endpoint
-  app.delete('/notes/:id', validateNoteIdMiddleware, async (req, res, next) => {
+  private deleteNoteHandler = async (
+    req: express.Request,
+    res: express.Response,
+    next: express.NextFunction
+  ) => {
     try {
       const noteId = req.params.id
-      await notesService.deleteNote(noteId)
-      return res.status(204).send()
+      await this.notesService.deleteNote(noteId)
+      return res.status(204).json({})
     } catch (err: any) {
-      if (err.message === 'Note not found') {
-        return res.status(404).json({ error: 'Note not found.' })
-      }
       next(err)
     }
-  })
-
-  // Error handler for secure error responses to unexpected errorss
-  app.use(unexpectedErrorHandler)
-
-  return app
+  }
 }
 
-// Only start the server if this file is run directly
+// Server Startup (only if run directly)
 const port = process.env.PORT || 3000
 if (require.main === module) {
-  const app = createApp()
-  app.listen(port, () => {
+  const api = new NotesApi()
+  api.app.listen(port, () => {
     console.log(`Notes API is running at http://localhost:${port}`)
   })
 }

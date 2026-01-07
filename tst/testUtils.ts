@@ -1,4 +1,4 @@
-import { createApp } from '../src/index'
+import { NotesApi } from '../src/index'
 import { InMemoryNotesRepository } from '../src/notesRepository'
 import { Express } from 'express'
 import request from 'supertest'
@@ -11,7 +11,8 @@ export type TestApp = {
 }
 
 export function createTestApp(repo: NotesRepository = new InMemoryNotesRepository()): TestApp {
-  const app = createApp(repo)
+  const notesApi = new NotesApi(repo)
+  const app = notesApi.app
   const postNote = (payload: any) => request(app).post('/notes').send(payload)
   const deleteNote = (id: string) => request(app).delete(`/notes/${id}`)
   return { app, postNote, deleteNote }
