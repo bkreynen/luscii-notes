@@ -1,4 +1,9 @@
+// --- Error handler middleware ---
 import { Request, Response, NextFunction } from 'express'
+
+export function unexpectedErrorHandler(err: any, req: Request, res: Response, next: NextFunction) {
+  return res.status(500).json({ error: 'Internal server error' })
+}
 
 // --- Cleaning logic ---
 function cleanNoteContent(content: string): string {

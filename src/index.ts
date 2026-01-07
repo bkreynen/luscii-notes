@@ -1,7 +1,7 @@
 import express from 'express'
 import { NotesServiceImpl } from './notesService'
 import { InMemoryNotesRepository } from './notesRepository'
-import { validateNoteMiddleware, cleanNoteMiddleware } from './middleware'
+import { validateNoteMiddleware, cleanNoteMiddleware, unexpectedErrorHandler } from './middleware'
 import { NotesRepository } from './types'
 import { Express } from 'express'
 
@@ -10,6 +10,7 @@ export function createApp(repo: NotesRepository = new InMemoryNotesRepository())
   app.use(express.json())
   const notesService = new NotesServiceImpl(repo)
 
+  //create note endpoint
   app.post('/notes', cleanNoteMiddleware, validateNoteMiddleware, async (req, res, next) => {
     try {
       const note = await notesService.createNote(req.body.content)
@@ -19,10 +20,8 @@ export function createApp(repo: NotesRepository = new InMemoryNotesRepository())
     }
   })
 
-  // Error handler for secure error responses
-  app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
-    res.status(500).json({ error: 'Internal server error' })
-  })
+  // Error handler for secure error responses to unexpected errorss
+  app.use(unexpectedErrorHandler)
 
   return app
 }
