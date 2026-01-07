@@ -97,6 +97,18 @@ describe('POST /notes, in memory storage', () => {
     expect(response.status).toBe(400)
     expect(response.body).toEqual({ error: 'Content exceeds maximum length.' })
   })
+
+  it('should trim whitespace from note content', async () => {
+    // Arrange
+    const noteContent = '   note with spaces   '
+
+    // Act
+    const response = await app.postNote({ content: noteContent })
+
+    // Assert
+    expect(response.status).toBe(201)
+    expect(response.body.content).toBe('note with spaces')
+  })
 })
 
 describe('POST /notes, internal error', () => {

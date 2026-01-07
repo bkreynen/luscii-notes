@@ -1,7 +1,7 @@
 import express from 'express'
 import { createNotesService } from './notesService'
 import { inMemoryNotesRepository } from './notesRepository'
-import { validateNoteMiddleware } from './validation'
+import { validateNoteMiddleware, cleanNoteMiddleware } from './middleware'
 import { NotesRepository } from './types'
 import { Express } from 'express'
 
@@ -10,7 +10,7 @@ export function createApp(repo: NotesRepository = inMemoryNotesRepository): Expr
   app.use(express.json())
   const notesService = createNotesService(repo)
 
-  app.post('/notes', validateNoteMiddleware, (req, res, next) => {
+  app.post('/notes', validateNoteMiddleware, cleanNoteMiddleware, (req, res, next) => {
     try {
       const note = notesService.createNote(req.body.content)
       return res.status(201).json(note)

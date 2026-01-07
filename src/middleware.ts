@@ -1,5 +1,18 @@
+// --- Cleaning logic ---
+function cleanNoteContent(content: string): string {
+  return content.trim()
+}
+
 import { Request, Response, NextFunction } from 'express'
-export function validateNoteContent(content: any): string | null {
+export function cleanNoteMiddleware(req: Request, res: Response, next: NextFunction) {
+  if (typeof req.body.content === 'string') {
+    req.body.content = cleanNoteContent(req.body.content)
+  }
+  next()
+}
+
+// --- Validation logic ---
+function validateNoteContent(content: any): string | null {
   if (content === undefined) {
     return 'Content is required.'
   }
