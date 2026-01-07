@@ -101,10 +101,10 @@ describe('POST /notes', () => {
         throw new Error('Simulated error')
       },
     }
-    app = createApp(errorRepo)
+    const errorApp = createApp(errorRepo)
 
     // Act
-    const response = await request(app).post('/notes').send({ content: 'test' })
+    const response = await request(errorApp).post('/notes').send({ content: 'test' })
 
     // Assert
     expect(response.status).toBe(500)
