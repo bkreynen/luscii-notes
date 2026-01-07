@@ -1,28 +1,24 @@
 import request from 'supertest'
-import express from 'express'
-
 import { validate as uuidValidate, version as uuidVersion } from 'uuid'
+import app from '../src/index'
 
 const postNote = (payload: any) => request(app).post('/notes').send(payload)
 
-const app = express()
-app.use(express.json())
-
 describe('POST /notes', () => {
-
-  it('should create a new note and return a valid UUID v4 id', async () => {
+  it('should create a new note and return a valid response', async () => {
     // Arrange
     const noteContent = 'My first note'
 
     // Act
     const response = await postNote({ content: noteContent })
 
-    // Assert
+    // Assert: Valid response structure and content
     expect(response.status).toBe(201)
+    expect(Object.keys(response.body).sort()).toEqual(['content', 'id'])
     expect(response.body).toHaveProperty('id')
-    expect(response.body.content).toBe(noteContent)
     expect(uuidValidate(response.body.id)).toBe(true)
     expect(uuidVersion(response.body.id)).toBe(4)
+    expect(response.body.content).toBe(noteContent)
   })
 
   it('should generate unique UUID v4 ids for multiple notes', async () => {
@@ -30,16 +26,19 @@ describe('POST /notes', () => {
     const contents = ['Note 1', 'Note 2', 'Note 3']
     const ids: string[] = []
 
-    // Act & Assert (per note). Every note should have valid UUID v4 id.
+    // Act & Assert: Every note should have valid UUID v4 id.
     for (const content of contents) {
+      // Act (per note)
       const response = await postNote({ content })
       ids.push(response.body.id)
+
+      // Assert (per note)
       expect(response.status).toBe(201)
       expect(uuidValidate(response.body.id)).toBe(true)
       expect(uuidVersion(response.body.id)).toBe(4)
     }
 
-    // Assert (all notes). All ids should be unique.
+    // Assert: All ids should be unique.
     const uniqueIds = new Set(ids)
     expect(uniqueIds.size).toBe(ids.length)
   })
@@ -51,7 +50,7 @@ describe('POST /notes', () => {
     // Act
     const response = await postNote(payload)
 
-    // Assert
+    // Assert: Missing content should return 400 with appropriate error message
     expect(response.status).toBe(400)
     expect(response.body).toEqual({ error: 'Content is required.' })
   })
@@ -63,7 +62,7 @@ describe('POST /notes', () => {
     // Act
     const response = await postNote(payload)
 
-    // Assert
+    // Assert: Content cannot be empty should return 400 with appropriate error message
     expect(response.status).toBe(400)
     expect(response.body).toEqual({ error: 'Content cannot be empty.' })
   })
@@ -75,7 +74,7 @@ describe('POST /notes', () => {
     // Act
     const response = await postNote(payload)
 
-    // Assert
+    // Assert: Content not a string should return 400 with appropriate error message
     expect(response.status).toBe(400)
     expect(response.body).toEqual({ error: 'Content must be a string.' })
   })
@@ -88,7 +87,7 @@ describe('POST /notes', () => {
     // Act
     const response = await postNote(payload)
 
-    // Assert
+    // Assert: Content too long should return 400 with appropriate error message
     expect(response.status).toBe(400)
     expect(response.body).toEqual({ error: 'Content exceeds maximum length.' })
   })
