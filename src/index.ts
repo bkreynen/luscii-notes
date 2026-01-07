@@ -51,7 +51,7 @@ export class NotesApi {
       const noteId = req.params.id
       await this.notesService.deleteNote(noteId)
       return res.status(204).json({})
-    } catch (err: any) {
+    } catch (err) {
       next(err)
     }
   }
