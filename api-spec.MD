@@ -53,10 +53,10 @@ Body: `{}` (empty object)
 
 ### Error Responses
 
-| Status | Condition                    | Response                               |
-| ------ | ---------------------------- | -------------------------------------- |
-| 400    | Invalid note ID (not a UUID) | `{ "error": "Invalid note ID." }`      |
-| 404    | Note not found               | `{ "error": "Note not found." }`       |
+| Status | Condition                    | Response                          |
+| ------ | ---------------------------- | --------------------------------- |
+| 400    | Invalid note ID (not a UUID) | `{ "error": "Invalid note ID." }` |
+| 404    | Note not found               | `{ "error": "Note not found." }`  |
 
 ---
 
@@ -86,6 +86,6 @@ If there are no notes, returns an empty array:
 
 ### Error Responses
 
-| Status | Condition             | Response                                 |
-| ------ | --------------------- | ---------------------------------------- |
-| 500    | Internal server error | `{ "error": "Internal server error" }`   |
+| Status | Condition             | Response                               |
+| ------ | --------------------- | -------------------------------------- |
+| 500    | Internal server error | `{ "error": "Internal server error" }` |

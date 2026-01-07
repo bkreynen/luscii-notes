@@ -8,6 +8,7 @@ export type TestApp = {
   app: Express
   postNote: (payload: any) => request.Test
   deleteNote: (id: string) => request.Test
+  getNotes: () => request.Test
 }
 
 export function createTestApp(repo: NotesRepository = new InMemoryNotesRepository()): TestApp {
@@ -15,7 +16,8 @@ export function createTestApp(repo: NotesRepository = new InMemoryNotesRepositor
   const app = notesApi.app
   const postNote = (payload: any) => request(app).post('/notes').send(payload)
   const deleteNote = (id: string) => request(app).delete(`/notes/${id}`)
-  return { app, postNote, deleteNote }
+  const getNotes = () => request(app).get('/notes')
+  return { app, postNote, deleteNote, getNotes }
 }
 
 export function createErrorTestApp(): TestApp {
