@@ -3,6 +3,7 @@ export interface NotesService {
 }
 export interface NotesRepository {
   saveNote(note: Note): void
+  clear(): void
 }
 
 export interface Note {

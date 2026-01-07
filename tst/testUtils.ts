@@ -7,12 +7,17 @@ import { NotesRepository } from '../src/types'
 export type TestApp = {
   app: Express
   postNote: (payload: any) => request.Test
+  clearNotes: () => void
 }
 
-export function createTestApp(repo = inMemoryNotesRepository): TestApp {
-  const app = createApp(repo)
+export function createTestApp(notesRepo = inMemoryNotesRepository): TestApp {
+  const app = createApp(notesRepo)
   const postNote = (payload: any) => request(app).post('/notes').send(payload)
-  return { app, postNote }
+  const clearNotes = () => {
+    notesRepo.clear()
+  }
+
+  return { app, postNote, clearNotes }
 }
 
 export function createErrorTestApp(): TestApp {
@@ -21,6 +26,7 @@ export function createErrorTestApp(): TestApp {
     saveNote() {
       throw new Error('Simulated repository error')
     },
+    clear() {},
   }
   return createTestApp(errorRepo)
 }
