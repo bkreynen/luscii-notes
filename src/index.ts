@@ -3,8 +3,9 @@ import { createNotesService } from './notesService'
 import { inMemoryNotesRepository } from './notesRepository'
 import { validateNoteMiddleware } from './validation'
 import { NotesRepository } from './types'
+import { Express } from 'express'
 
-export function createApp(repo: NotesRepository = inMemoryNotesRepository) {
+export function createApp(repo: NotesRepository = inMemoryNotesRepository): Express {
   const app = express()
   app.use(express.json())
   const notesService = createNotesService(repo)

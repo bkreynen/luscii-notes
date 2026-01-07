@@ -1,25 +1,26 @@
-import { createApp } from '../src/index'
-import { inMemoryNotesRepository } from '../src/notesRepository'
-import request from 'supertest'
+import request, { Test } from 'supertest'
 import { validate as uuidValidate, version as uuidVersion } from 'uuid'
+import { Express } from 'express'
+import { createTestApp, createErrorTestApp, TestApp } from './testUtils'
+import { create } from 'domain'
 
-let app = createApp(inMemoryNotesRepository)
-const postNote = (payload: any) => request(app).post('/notes').send(payload)
+let app: TestApp
 
-describe('POST /notes', () => {
+describe('POST /notes, in memory storage', () => {
+  beforeEach(() => {
+    app = createTestApp()
+  })
+
   it('should create a new note and return a valid response', async () => {
-    // Arrange
     const noteContent = 'My first note'
 
     // Act
-    const response = await postNote({ content: noteContent })
-
-    // Assert: Valid response structure and content
+    const response = await app.postNote({ content: noteContent })
     expect(response.status).toBe(201)
     expect(Object.keys(response.body).sort()).toEqual(['content', 'id'])
+    expect(response.body.content).toBe(noteContent)
     expect(uuidValidate(response.body.id)).toBe(true)
     expect(uuidVersion(response.body.id)).toBe(4)
-    expect(response.body.content).toBe(noteContent)
   })
 
   it('should generate unique UUID v4 ids for multiple notes', async () => {
@@ -30,7 +31,7 @@ describe('POST /notes', () => {
     // Act & Assert: Every note should have valid UUID v4 id.
     for (const content of contents) {
       // Act
-      const response = await postNote({ content })
+      const response = await app.postNote({ content })
       ids.push(response.body.id)
 
       // Assert
@@ -49,7 +50,7 @@ describe('POST /notes', () => {
     const payload = {}
 
     // Act
-    const response = await postNote(payload)
+    const response = await app.postNote(payload)
 
     // Assert
     expect(response.status).toBe(400)
@@ -61,7 +62,7 @@ describe('POST /notes', () => {
     const payload = { content: '' }
 
     // Act
-    const response = await postNote(payload)
+    const response = await app.postNote(payload)
 
     // Assert
     expect(response.status).toBe(400)
@@ -73,7 +74,7 @@ describe('POST /notes', () => {
     const payload = { content: 123 }
 
     // Act
-    const response = await postNote(payload)
+    const response = await app.postNote(payload)
 
     // Assert
     expect(response.status).toBe(400)
@@ -86,24 +87,25 @@ describe('POST /notes', () => {
     const payload = { content: longContent }
 
     // Act
-    const response = await postNote(payload)
+    const response = await app.postNote(payload)
 
     // Assert
     expect(response.status).toBe(400)
     expect(response.body).toEqual({ error: 'Content exceeds maximum length.' })
   })
+})
+
+describe('POST /notes, internal error', () => {
+  beforeEach(() => {
+    app = createErrorTestApp()
+  })
 
   it('should handle unexpected errors securely', async () => {
-    // Arrange: Custom repo that throws error on saveNote
-    const errorRepo = {
-      saveNote: () => {
-        throw new Error('Simulated error')
-      },
-    }
-    const errorApp = createApp(errorRepo)
+    // Arrange
+    const payload = { content: 'test' }
 
     // Act
-    const response = await request(errorApp).post('/notes').send({ content: 'test' })
+    const response = await app.postNote(payload)
 
     // Assert
     expect(response.status).toBe(500)
