@@ -23,3 +23,6 @@ jobs:
 
       - name: Run Prettier
         run: npx prettier --check .
+
+      - name: Run Tests
+        run: npm test
