@@ -20,7 +20,6 @@ app.post('/notes', validateNoteMiddleware, (req, res, next) => {
   }
 })
 
-
 // Error handler for secure error responses
 app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
   res.status(500).json({ error: 'Internal server error' })

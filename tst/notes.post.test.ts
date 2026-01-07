@@ -6,7 +6,6 @@ import app from '../src/index'
 const postNote = (payload: any) => request(app).post('/notes').send(payload)
 
 describe('POST /notes', () => {
-
   it('should create a new note and return a valid response', async () => {
     // Arrange
     const noteContent = 'My first note'
@@ -95,20 +94,20 @@ describe('POST /notes', () => {
   })
 
   it('should handle unexpected errors securely', async () => {
-      // Arrange: Mock createNote to throw an error
-      jest.spyOn(notesService, 'createNote').mockImplementation(() => {
-        throw new Error('Simulated error')
-      })
+    // Arrange: Mock createNote to throw an error
+    jest.spyOn(notesService, 'createNote').mockImplementation(() => {
+      throw new Error('Simulated error')
+    })
 
-      // Act
-      const response = await postNote({ content: 'test' })
+    // Act
+    const response = await postNote({ content: 'test' })
 
-      // Assert
-      expect(response.status).toBe(500)
-      expect(response.body).toEqual({ error: 'Internal server error' })
+    // Assert
+    expect(response.status).toBe(500)
+    expect(response.body).toEqual({ error: 'Internal server error' })
 
-      // Cleanup
-      jest.restoreAllMocks()
+    // Cleanup
+    jest.restoreAllMocks()
   })
 })
 

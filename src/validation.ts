@@ -14,7 +14,7 @@ export function validateNoteContent(content: any): string | null {
   }
   return null
 }
- 
+
 export function validateNoteMiddleware(req: Request, res: Response, next: NextFunction) {
   const error = validateNoteContent(req.body.content)
   if (error) {
