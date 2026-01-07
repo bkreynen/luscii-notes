@@ -3,11 +3,11 @@ import { Note, NotesRepository } from './types'
 let notes: Note[] = []
 
 export const inMemoryNotesRepository: NotesRepository = {
-  saveNote(note: Note) {
+  async saveNote(note: Note) {
     notes.push(note)
   },
 
-  clear() {
+  async clear() {
     notes = []
   },
 }

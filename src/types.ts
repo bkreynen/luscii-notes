@@ -1,5 +1,5 @@
 export interface NotesService {
-  createNote(content: string): Note
+  createNote(content: string): Promise<Note>
 }
 
 export interface NotesRepository {

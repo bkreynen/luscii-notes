@@ -3,12 +3,12 @@ import { v4 as uuidv4 } from 'uuid'
 
 export function createNotesService(repo: NotesRepository): NotesService {
   return {
-    createNote(content: string): Note {
+    async createNote(content: string): Promise<Note> {
       const note: Note = {
         id: uuidv4(),
         content,
       }
-      repo.saveNote(note)
+      await repo.saveNote(note)
       return note
     },
   }

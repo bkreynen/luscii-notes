@@ -10,9 +10,9 @@ export function createApp(repo: NotesRepository = inMemoryNotesRepository): Expr
   app.use(express.json())
   const notesService = createNotesService(repo)
 
-  app.post('/notes', validateNoteMiddleware, cleanNoteMiddleware, (req, res, next) => {
+  app.post('/notes', validateNoteMiddleware, cleanNoteMiddleware, async (req, res, next) => {
     try {
-      const note = notesService.createNote(req.body.content)
+      const note = await notesService.createNote(req.body.content)
       return res.status(201).json(note)
     } catch (err) {
       next(err)
